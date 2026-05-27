@@ -1,0 +1,125 @@
+# ----------------------------------------------------------------------------
+# Orquestación de todos los servicios del sistema.
+# Levanta: balanceador NGINX, dos apps web (inglés y español), base de datos
+# MySQL y el servicio de estadísticas que envía reportes por correo.
+# ----------------------------------------------------------------------------
+
+services:
+  base-de-datos:
+    image: mysql:8.0
+    container_name: bd-registros-eafit
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD_ROOT}
+      MYSQL_DATABASE: ${MYSQL_NOMBRE_BD}
+      MYSQL_USER: ${MYSQL_USUARIO}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD_USUARIO}
+    volumes:
+      - ./base-de-datos/scripts-inicializacion:/docker-entrypoint-initdb.d:ro
+      - datos-mysql:/var/lib/mysql
+    networks:
+      - red-interna
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-p${MYSQL_PASSWORD_ROOT}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  app-web-ingles:
+    build:
+      context: ./aplicacion-web-ingles
+      dockerfile: Dockerfile
+    container_name: webserver-ingles
+    restart: unless-stopped
+    environment:
+      IDIOMA_APP: "en"
+      MYSQL_HOST: base-de-datos
+      MYSQL_PUERTO: 3306
+      MYSQL_NOMBRE_BD: ${MYSQL_NOMBRE_BD}
+      MYSQL_USUARIO: ${MYSQL_USUARIO}
+      MYSQL_PASSWORD_USUARIO: ${MYSQL_PASSWORD_USUARIO}
+      IDENTIFICADOR_SERVIDOR: "Web Server 1 (EN)"
+    depends_on:
+      base-de-datos:
+        condition: service_healthy
+    networks:
+      - red-interna
+
+  app-web-espanol:
+    build:
+      context: ./aplicacion-web-espanol
+      dockerfile: Dockerfile
+    container_name: webserver-espanol
+    restart: unless-stopped
+    environment:
+      IDIOMA_APP: "es"
+      MYSQL_HOST: base-de-datos
+      MYSQL_PUERTO: 3306
+      MYSQL_NOMBRE_BD: ${MYSQL_NOMBRE_BD}
+      MYSQL_USUARIO: ${MYSQL_USUARIO}
+      MYSQL_PASSWORD_USUARIO: ${MYSQL_PASSWORD_USUARIO}
+      IDENTIFICADOR_SERVIDOR: "Web Server 2 (ES)"
+    depends_on:
+      base-de-datos:
+        condition: service_healthy
+    networks:
+      - red-interna
+
+  balanceador-nginx:
+    build:
+      context: ./balanceador
+      dockerfile: Dockerfile
+    container_name: balanceador-carga
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - app-web-ingles
+      - app-web-espanol
+    networks:
+      - red-interna
+
+  servicio-estadisticas:
+    build:
+      context: ./servicio-estadisticas
+      dockerfile: Dockerfile
+    container_name: reportes-estadisticas
+    restart: unless-stopped
+    ports:
+      - "6001:6000"
+    environment:
+      MYSQL_HOST: base-de-datos
+      MYSQL_PUERTO: 3306
+      MYSQL_NOMBRE_BD: ${MYSQL_NOMBRE_BD}
+      MYSQL_USUARIO: ${MYSQL_USUARIO}
+      MYSQL_PASSWORD_USUARIO: ${MYSQL_PASSWORD_USUARIO}
+      SMTP_SERVIDOR: ${SMTP_SERVIDOR}
+      SMTP_PUERTO: ${SMTP_PUERTO}
+      SMTP_USUARIO: ${SMTP_USUARIO}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      CORREO_DESTINATARIO: ${CORREO_DESTINATARIO}
+      CORREO_REMITENTE: ${CORREO_REMITENTE}
+    depends_on:
+      base-de-datos:
+        condition: service_healthy
+    networks:
+      - red-interna
+
+networks:
+  red-interna:
+    driver: bridge
+
+volumes:
+  datos-mysql:
+    driver: local

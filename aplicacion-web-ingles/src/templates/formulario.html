@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ textos.titulo_pagina }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}" />
+</head>
+<body>
+
+    <main class="contenedor-principal">
+
+        <header class="encabezado">
+            <h1>{{ textos.titulo_formulario }}</h1>
+            <p class="subtitulo">{{ textos.subtitulo }}</p>
+        </header>
+
+        {# Mensaje de éxito o error, según el resultado del POST #}
+        {% if mensaje_resultado %}
+            <div class="mensaje {{ 'mensaje-exito' if fue_exitoso else 'mensaje-error' }}">
+                {{ mensaje_resultado }}
+            </div>
+        {% endif %}
+
+        <form method="POST" action="/" class="formulario-registro" novalidate>
+
+            <div class="campo">
+                <label for="nombre_completo">{{ textos.etiqueta_nombre }}</label>
+                <input
+                    type="text"
+                    id="nombre_completo"
+                    name="nombre_completo"
+                    maxlength="150"
+                    required
+                />
+            </div>
+
+            <div class="campo">
+                <label for="numero_comuna">{{ textos.etiqueta_comuna }}</label>
+                <select id="numero_comuna" name="numero_comuna" required>
+                    <option value="">{{ textos.comuna_placeholder }}</option>
+                    {% for numero in comunas %}
+                        <option value="{{ numero }}">{{ numero }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="campo">
+                <label for="carrera_interes">{{ textos.etiqueta_carrera }}</label>
+                <select id="carrera_interes" name="carrera_interes" required>
+                    <option value="">{{ textos.carrera_placeholder }}</option>
+                    {% for nombre_carrera in carreras %}
+                        <option value="{{ nombre_carrera }}">
+                            {{ textos.carreras_traducidas[nombre_carrera] }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="boton-enviar">
+                {{ textos.boton_enviar }}
+            </button>
+        </form>
+
+        <footer class="pie-pagina">
+            <small>
+                {{ textos.pie_servidor }}: <strong>{{ identificador_servidor }}</strong>
+            </small>
+        </footer>
+    </main>
+
+</body>
+</html>

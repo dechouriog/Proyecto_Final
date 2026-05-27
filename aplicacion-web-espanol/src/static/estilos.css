@@ -1,0 +1,160 @@
+/* ----------------------------------------------------------------------------
+   Estilos de la aplicación de registro.
+   Diseño limpio, mobile-first, con colores institucionales de EAFIT.
+   ---------------------------------------------------------------------------- */
+
+:root {
+    --color-primario: #003366;       /* Azul institucional */
+    --color-secundario: #d4a017;     /* Dorado/amarillo EAFIT */
+    --color-fondo: #f4f6f9;
+    --color-tarjeta: #ffffff;
+    --color-texto: #1d2533;
+    --color-texto-suave: #6c7280;
+    --color-borde: #d8dde5;
+    --color-exito: #1f7a3a;
+    --color-exito-fondo: #e6f4ec;
+    --color-error: #b00020;
+    --color-error-fondo: #fdecea;
+    --sombra-tarjeta: 0 4px 18px rgba(0, 30, 60, 0.08);
+    --radio-borde: 10px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--color-fondo);
+    color: var(--color-texto);
+    line-height: 1.5;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.contenedor-principal {
+    width: 100%;
+    max-width: 520px;
+    background: var(--color-tarjeta);
+    border-radius: var(--radio-borde);
+    box-shadow: var(--sombra-tarjeta);
+    padding: 36px 32px;
+}
+
+/* ---- Encabezado ---- */
+.encabezado {
+    text-align: center;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 3px solid var(--color-secundario);
+}
+
+.encabezado h1 {
+    margin: 0 0 8px 0;
+    font-size: 1.6rem;
+    color: var(--color-primario);
+}
+
+.subtitulo {
+    margin: 0;
+    color: var(--color-texto-suave);
+    font-size: 0.95rem;
+}
+
+/* ---- Mensajes de resultado ---- */
+.mensaje {
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    border-left: 4px solid;
+}
+
+.mensaje-exito {
+    background: var(--color-exito-fondo);
+    color: var(--color-exito);
+    border-left-color: var(--color-exito);
+}
+
+.mensaje-error {
+    background: var(--color-error-fondo);
+    color: var(--color-error);
+    border-left-color: var(--color-error);
+}
+
+/* ---- Formulario ---- */
+.formulario-registro {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.campo label {
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: var(--color-primario);
+}
+
+.campo input,
+.campo select {
+    padding: 11px 14px;
+    border: 1px solid var(--color-borde);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    background: #fff;
+    color: var(--color-texto);
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.campo input:focus,
+.campo select:focus {
+    outline: none;
+    border-color: var(--color-primario);
+    box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.15);
+}
+
+.boton-enviar {
+    margin-top: 8px;
+    padding: 13px 20px;
+    background: var(--color-primario);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s, transform 0.05s;
+}
+
+.boton-enviar:hover {
+    background: #002244;
+}
+
+.boton-enviar:active {
+    transform: translateY(1px);
+}
+
+/* ---- Pie de página ---- */
+.pie-pagina {
+    margin-top: 28px;
+    padding-top: 16px;
+    border-top: 1px solid var(--color-borde);
+    text-align: center;
+    color: var(--color-texto-suave);
+}
+
+.pie-pagina strong {
+    color: var(--color-primario);
+}

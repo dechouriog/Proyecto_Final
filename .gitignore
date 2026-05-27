@@ -1,0 +1,28 @@
+# Variables de entorno reales (sensibles - NUNCA subir a git)
+.env
+
+# Certificados SSL generados
+balanceador/certs/*.key
+balanceador/certs/*.crt
+
+# Caché de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+.venv/
+venv/
+
+# Editores
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Logs
+*.log
+
+# Volúmenes locales de Docker (por si alguien hace bind mount)
+datos-mysql-local/
