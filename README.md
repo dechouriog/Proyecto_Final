@@ -44,7 +44,7 @@ Toda la arquitectura corre sobre Docker y está pensada para desplegarse en AWS 
                        ▼
               ┌────────────────────┐
               │ Servicio Estad.    │  ← Envía reporte por email
-              │ Flask :6000        │     con gráficas a admin
+              │ Flask :6001        │     con gráficas a admin
               └────────────────────┘
 ```
 
