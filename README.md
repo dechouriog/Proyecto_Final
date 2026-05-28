@@ -84,8 +84,8 @@ docker compose up --build -d
 ```
 
 4. Acceder en navegador:
-   - `https://<tu-dominio-o-IP>/` (round robin entre las dos apps)
-   - `http://<tu-dominio-o-IP>:6000/enviar-reporte` para disparar el envío de estadísticas.
+   - `https://eafit-proyecto.freedynamicdns.net/` (round robin entre las dos apps)
+   - `http://eafit-proyecto.freedynamicdns.net:6001/` para disparar el envío de estadísticas.
 
 Más detalles en `documentacion/guia-despliegue.md`.
 
